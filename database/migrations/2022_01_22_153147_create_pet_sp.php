@@ -31,7 +31,7 @@ class CreatePetSp extends Migration
 
                             END;";
 
-                            \DB::unprepared($storeProcedure);
+                            DB::unprepared($storeProcedure);
     }
 
     /**

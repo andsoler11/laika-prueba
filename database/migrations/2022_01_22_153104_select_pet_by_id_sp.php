@@ -20,7 +20,7 @@ class SelectPetByIdSp extends Migration
                         SELECT * FROM pets WHERE id = idx;
                         END;";
 
-                        \DB::unprepared($storeProcedure);
+                        DB::unprepared($storeProcedure);
     }
 
     /**
