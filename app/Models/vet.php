@@ -6,10 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class vet extends Model
-{
-    use HasFactory;
-    
-
+{ 
     static $rules = [
 		'name' => 'required',
 		'city' => 'required',
@@ -18,4 +15,12 @@ class vet extends Model
     
 
     protected $fillable = ['name', 'city', 'phone'];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function pets()
+    {
+        return $this->hasMany('App\Models\Pet', 'vet_id', 'id');
+    }
 }
