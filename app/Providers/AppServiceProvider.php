@@ -15,10 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // HOME //
-        $this->app->when(\App\Http\Controllers\HomeController::class)
-            ->needs(\App\Helpers\Response::class)
-            ->give(\App\Helpers\JsonResponse::class);
+        //
     }
 
     /**
