@@ -4,7 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\VetController;
 use App\Http\Controllers\PetController;
-use App\Http\Controllers\WelcomeController;
 use App\Http\Middleware\ApiMiddleware;
 /*
 |--------------------------------------------------------------------------
