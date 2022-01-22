@@ -20,7 +20,7 @@ class DeletePetSp extends Migration
                         DELETE FROM pets WHERE id = idx;
                         END;";
 
-                        \DB::unprepared($storeProcedure);
+                        DB::unprepared($storeProcedure);
     }
 
     /**

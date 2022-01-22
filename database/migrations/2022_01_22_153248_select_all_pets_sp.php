@@ -20,7 +20,7 @@ class SelectAllPetsSp extends Migration
                             SELECT * FROM pets;
                             END;";
 
-        \DB::unprepared($storeProcedure);
+        DB::unprepared($storeProcedure);
     }
 
     /**
