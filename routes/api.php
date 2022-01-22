@@ -15,23 +15,22 @@ use App\Http\Middleware\ApiMiddleware;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::group(['middleware' => ['cors']], function () {
-// all this rules will need the api-key token to authorize!
-    Route::group(['middleware' => 'api-key'], function () {
-        Route::group(['prefix' => 'vets'], function () {
-            Route::get('', [VetController::class,'index']);
-            Route::post('', [VetController::class,'store']);
-            Route::get('/{id}', [VetController::class,'show']);
-            Route::put('/{id}', [VetController::class,'update']);
-            Route::delete('/{id}', [VetController::class,'destroy']);
-        });
 
-        Route::group(['prefix' => 'pets'], function () {
-            Route::get('', [PetController::class,'index']);
-            Route::post('', [PetController::class,'store']);
-            Route::get('/{id}', [PetController::class,'show']);
-            Route::put('/{id}', [PetController::class,'update']);
-            Route::delete('/{id}', [PetController::class,'destroy']);
-        });
+// all this rules will need the api-key token to authorize!
+Route::group(['middleware' => 'api-key'], function () {
+    Route::group(['prefix' => 'vets'], function () {
+        Route::get('', [VetController::class,'index']);
+        Route::post('', [VetController::class,'store']);
+        Route::get('/{id}', [VetController::class,'show']);
+        Route::put('/{id}', [VetController::class,'update']);
+        Route::delete('/{id}', [VetController::class,'destroy']);
+    });
+
+    Route::group(['prefix' => 'pets'], function () {
+        Route::get('', [PetController::class,'index']);
+        Route::post('', [PetController::class,'store']);
+        Route::get('/{id}', [PetController::class,'show']);
+        Route::put('/{id}', [PetController::class,'update']);
+        Route::delete('/{id}', [PetController::class,'destroy']);
     });
 });
