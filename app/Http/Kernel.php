@@ -47,7 +47,9 @@ class Kernel extends HttpKernel
 
         'api-key' => [
             \App\Http\Middleware\ApiMiddleware::class
-        ]
+        ],
+
+        "cors" => \App\Http\Middleware\Cors::class,
     ];
 
     /**
