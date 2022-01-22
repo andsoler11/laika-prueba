@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// redirect to the api
 Route::get('/', function () {
 	return redirect('api/vets');
 });

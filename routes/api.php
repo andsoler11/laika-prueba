@@ -16,6 +16,7 @@ use App\Http\Middleware\ApiMiddleware;
 |
 */
 
+// all this rules will need the api-key token to authorize!
 Route::group(['middleware' => 'api-key'], function () {
     Route::group(['prefix' => 'vets'], function () {
         Route::get('', [VetController::class,'index']);

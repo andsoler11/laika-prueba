@@ -10,7 +10,7 @@ class ApiMiddleware
 {
     /**
      * Handle an incoming request.
-     *
+     * we need a header with the name 'token' and the value 'api-key-laika'
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
      * @return mixed

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pet extends Model
 {
+    // rules of the Pet model
     static $rules = [
 		'vet_id' => 'required',
 		'pet_name' => 'required',
@@ -14,17 +15,15 @@ class Pet extends Model
 		'animal' => 'required',
     ];
 
-    protected $perPage = 20;
-
     /**
      * Attributes that should be mass-assignable.
-     *
      * @var array
      */
     protected $fillable = ['vet_id','pet_name','owner_name','animal'];
 
 
     /**
+     * all pets would need to have 1 assigned vet
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function vet()

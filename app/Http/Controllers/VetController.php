@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\vet;
 
+/**
+ * in this cotroller I'm going to use the ORM to do the calls to the DB
+ */
 class VetController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
+     * return all vets that are in our DB
      * @return \Illuminate\Http\Response
      */
     public function index()
@@ -19,27 +21,13 @@ class VetController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
-     *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-
-        $validator = request()->validate(Vet::$rules);
-        // print_r($validator); exit;
-
+        request()->validate(Vet::$rules);
         $vet = new Vet();
         $vet->name = $request->name;
         $vet->city = $request->city;
@@ -49,7 +37,6 @@ class VetController extends Controller
 
     /**
      * Display the specified resource.
-     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -59,20 +46,9 @@ class VetController extends Controller
         return $vet;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
-     *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -91,7 +67,6 @@ class VetController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
