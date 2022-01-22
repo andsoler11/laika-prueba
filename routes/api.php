@@ -20,6 +20,7 @@ Route::group(['middleware' => 'api-key'], function () {
     Route::group(['prefix' => 'vets'], function () {
         Route::get('', [VetController::class,'index']);
         Route::post('', [VetController::class,'store']);
+        Route::get('/{id}', [VetController::class,'show']);
         Route::put('/{id}', [VetController::class,'update']);
         Route::delete('/{id}', [VetController::class,'destroy']);
     });
@@ -27,6 +28,7 @@ Route::group(['middleware' => 'api-key'], function () {
     Route::group(['prefix' => 'pets'], function () {
         Route::get('', [PetController::class,'index']);
         Route::post('', [PetController::class,'store']);
+        Route::get('/{id}', [PetController::class,'show']);
         Route::put('/{id}', [PetController::class,'update']);
         Route::delete('/{id}', [PetController::class,'destroy']);
     });

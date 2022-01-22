@@ -36,7 +36,10 @@ class VetController extends Controller
      */
     public function store(Request $request)
     {
-        request()->validate(Vet::$rules);
+
+        $validator = request()->validate(Vet::$rules);
+        // print_r($validator); exit;
+
         $vet = new Vet();
         $vet->name = $request->name;
         $vet->city = $request->city;
@@ -52,7 +55,8 @@ class VetController extends Controller
      */
     public function show($id)
     {
-        //
+        $vet = Vet::find($id);
+        return $vet;
     }
 
     /**

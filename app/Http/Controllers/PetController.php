@@ -49,7 +49,9 @@ class PetController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate(Pet::$rules);
+        request()->validate(Pet::$rules);
+        $pet = Pet::findOrFail($request->id);
+        $pet = Vet::findOrFail($request->vet_id);
         $dateNow = date('Y-m-d H:i:s');
         DB::select("call update_pet(?,?,?,?,?,?)",
                     [
