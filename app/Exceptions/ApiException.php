@@ -6,7 +6,11 @@ use Exception;
 
 class ApiException extends Exception
 {
-    
+    /**
+     * Defaults function to return an API error
+     * @param $array Array to return
+     * @param $format [array,json]
+     */
     public static function return_error($errorString, $statusCode, $userMessage="",  $array = "",$format="array")
     {
 
@@ -44,7 +48,7 @@ class ApiException extends Exception
         if($format == "json") {
             $out = json_encode($out, JSON_PRETTY_PRINT);
         }
-        return response()->json($out, $statusCode);
 
+        return response()->json($out, $statusCode);
     }
 }
