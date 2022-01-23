@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Pet;
 use App\Models\Vet;
 use DB;
+use App\Exceptions\ApiException;
+use Exception;
+use Illuminate\Support\Facades\Validator;
+use Mockery\Undefined;
 
 /**
  * in this controller I'm going to use the SP to get the calls to the db
@@ -20,9 +24,9 @@ class PetController extends Controller
      */
     public function index()
     {
-        $pets = DB::select("call select_all_pets()");
-        $vets = Vet::all();
-        return [$pets, $vets];
+        $output['pets'] = Pet::selectAll();
+        $output['vets'] = Vet::all();
+        return ApiException::return_result(200, $output);
     }
 
     /**
@@ -32,17 +36,20 @@ class PetController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(Pet::$rules);
-        $dateNow = date('Y-m-d H:i:s');
-        DB::select("call create_pet(?,?,?,?,?,?)",
-                    [
-                    $request->input('vet_id'), 
-                    $request->input('pet_name'), 
-                    $request->input('owner_name'), 
-                    $request->input('animal'), 
-                    $dateNow,
-                    $dateNow
-                    ]);
+        $validator = Validator::make($request->all(), Pet::$rules);
+        if ($validator->fails()) {
+            return ApiException::return_error('invalid field', 422, '', $validator->messages());
+        }
+
+
+        try {
+            $vet = Vet::findOrFail($request->vet_id);
+        } catch (Exception $e) {
+            return ApiException::return_error('The vet selected doesn\'t exists', 404, $e->getMessage());
+        }
+
+        $response = Pet::insertData($request);
+        return ApiException::return_result(200, $response, 'Pet created successfully!');
     }
 
 
@@ -52,19 +59,14 @@ class PetController extends Controller
      */
     public function show($id)
     {
-        $pet = DB::select("call select_pet_by_id(?)", [$id])[0];
-        $vets = Vet::all();
-        return [$pet, $vets];
-    }
+        try {
+            $output['pet'] = Pet::findById($id);
+        } catch (Exception $e) {
+            return ApiException::return_error('The pet selected doesn\'t exists', 404);
+        }
 
-    /**
-     * get the pet that we want to edit, call the SP
-     * to get the pet by the id
-     */
-    public function edit($id)
-    {
-        $pet = DB::select("call select_pet_by_id(?)", [$id])[0];
-        return $pet;
+        $output['vets'] = Vet::all();
+        return ApiException::return_result(200, $output);
     }
 
     /**
@@ -75,20 +77,26 @@ class PetController extends Controller
      */
     public function update(Request $request, $id)
     {
-        request()->validate(Pet::$rules);
-        $pet = Pet::findOrFail($request->id);
-        $pet = Vet::findOrFail($request->vet_id);
-        $dateNow = date('Y-m-d H:i:s');
-        DB::select("call update_pet(?,?,?,?,?,?)",
-                    [
-                    $id, 
-                    $request->input('vet_id'), 
-                    $request->input('pet_name'), 
-                    $request->input('owner_name'), 
-                    $request->input('animal'), 
-                    $dateNow
-                    ]);
+        $validator = Validator::make($request->all(), Pet::$rules);
+        if ($validator->fails()) {
+            return ApiException::return_error('invalid field', 422, '', $validator->messages());
+        }
 
+        try {
+            $pet = Pet::findOrFail($request->id);
+        } catch (Exception $e){
+            return ApiException::return_error('The pet selected doesn\'t exists', 404);
+        }
+
+        try {
+            $vet = Vet::findOrFail($request->vet_id);
+        } catch (Exception $e){
+            return ApiException::return_error('The vet selected doesn\'t exists', 404);
+        }
+        
+
+        $response = Pet::updateData($request, $id);
+        return ApiException::return_result(200, $response, 'Updated pet sucessfully!');
     }
 
     /**
@@ -97,7 +105,7 @@ class PetController extends Controller
      */
     public function destroy($id)
     {
-        $pet = DB::select("call delete_pet_by_id(?)", [$id]);
-        return $pet;
+        $pet = Pet::deleteById($id);
+        return ApiException::return_result(200, $pet, 'Deleted pet sucessfully!');
     }
 }

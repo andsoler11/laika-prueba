@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use App\Exceptions\ApiException;
 
 class ApiMiddleware
 {
@@ -19,7 +20,7 @@ class ApiMiddleware
     {
         $header = $request->header('token');
         if (!$header || $header != 'api-key-laika') {
-            abort(403, "not authorized!");
+            return ApiException::return_error('missing token', 403, 'please put in the header the authorized token');
         }
 
         return $next($request);

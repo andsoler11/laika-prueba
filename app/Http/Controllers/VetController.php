@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\vet;
-
+use App\Exceptions\ApiException;
+use Exception;
+use Illuminate\Support\Facades\Validator;
 /**
  * in this cotroller I'm going to use the ORM to do the calls to the DB
  */
@@ -17,7 +19,7 @@ class VetController extends Controller
     public function index()
     {
         $vets = Vet::all();
-        return $vets;
+        return ApiException::return_result(200, $vets);
     }
 
     /**
@@ -27,12 +29,19 @@ class VetController extends Controller
      */
     public function store(Request $request)
     {
-        request()->validate(Vet::$rules);
+        $validator = Validator::make($request->all(), Vet::$rules);
+
+        if ($validator->fails()) {
+            return ApiException::return_error('invalid field', 422, '', $validator->messages());
+        }
+
         $vet = new Vet();
         $vet->name = $request->name;
         $vet->city = $request->city;
         $vet->phone = $request->phone;
         $vet->save();
+
+		return ApiException::return_result(200, $vet, 'Vet created successfully!');
     }
 
     /**
@@ -43,7 +52,7 @@ class VetController extends Controller
     public function show($id)
     {
         $vet = Vet::find($id);
-        return $vet;
+        return ApiException::return_result(200, $vet, 'Found vet sucessfully!');
     }
 
 
@@ -55,14 +64,23 @@ class VetController extends Controller
      */
     public function update(Request $request)
     {
-        request()->validate(Vet::$rules);
-        $vet = Vet::findOrFail($request->id);
+        $validator = Validator::make($request->all(), Vet::$rules);
+        if ($validator->fails()) {
+            return ApiException::return_error('invalid field', 422, '', $validator->messages());
+        }
+
+        try {
+            $vet = Vet::findOrFail($request->id);
+        } catch (\Exception $e) {
+            return ApiException::return_error('The vet selected doesn\'t exists', 404, $e->getMessage());
+        }
+
         $vet->name = $request->name;
         $vet->city = $request->city;
         $vet->phone = $request->phone;
         $vet->save();
 
-        return $vet;
+        return ApiException::return_result(200, $vet, 'Updated vet sucessfully!');
     }
 
     /**
@@ -73,6 +91,6 @@ class VetController extends Controller
     public function destroy(Request $request)
     {
         $vet = Vet::destroy($request->id);
-        return $vet;
+        return ApiException::return_result(200, $vet, 'Deleted vet sucessfully!');
     }
 }

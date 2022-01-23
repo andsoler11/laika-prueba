@@ -38,12 +38,26 @@ class PetsTest extends TestCase
             'Accept' => 'application/json',
             'token' => 'api-key-laika'
         ])->post('api/pets', [
-            "vet_id" => "1",
+            "vet_id" => "2",
             "pet_name" => "test",
             "owner_name" => "test",
             "animal" => ""
         ]);
         $response->assertStatus(422);
+    }
+
+    public function test_save_pet_invalid_vet()
+    {
+        $response = $this->withHeaders([
+            'Accept' => 'application/json',
+            'token' => 'api-key-laika'
+        ])->post('api/pets', [
+            "vet_id" => "9999",
+            "pet_name" => "test",
+            "owner_name" => "test",
+            "animal" => "test"
+        ]);
+        $response->assertStatus(404);
     }
 
     public function test_save_pet()
@@ -52,7 +66,7 @@ class PetsTest extends TestCase
             'Accept' => 'application/json',
             'token' => 'api-key-laika'
         ])->post('api/pets', [
-            "vet_id" => "1",
+            "vet_id" => "2",
             "pet_name" => "test",
             "owner_name" => "test",
             "animal" => "test"
