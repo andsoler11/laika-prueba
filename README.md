@@ -1,8 +1,3 @@
-## PRUEBA TECNICA LAIKA
-En este repositorio se encuentra la prueba tecnica realizada para el proceso de seleccion de Laika <br>
-Consta de 2 CRUDs que se consumen a traves de una API rest, usando tablas con relaciones. <br>
-Todas las tablas y SP se crean por medio de las migraciones de Laravel.
-
 ## CRUD 1
 Este crud esta conectado con el modelo de Vet (veterinaria), hago uso del ORM de laravel para hacer las consultas a la BD,
 
